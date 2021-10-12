@@ -9,7 +9,7 @@ pool:
 variables:
   scheme: ''
   sdk: 'iphoneos'
-  configuration: 'Release'
+  configuration: 'Debug'
 
 steps:
 - task: Xcode@5
