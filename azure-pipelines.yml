@@ -12,15 +12,30 @@ variables:
   configuration: 'Release'
 
 steps:
+# - task: Xcode@5
+#   inputs:
+#     sdk: '$(sdk)'
+#     scheme: '$(scheme)'
+#     configuration: '$(configuration)'
+#     xcodeVersion: 'default' # Options: default, 10, 9, 8, specifyPath
+#     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
+#     packageApp: false
+#     signingOption: 'manual'
+#     signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+#     provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+#     args: 'CODE_SIGNING_ALLOWED=No'
+
 - task: Xcode@5
+  displayName: 'Xcode build Unity-iPhone'
   inputs:
-    sdk: '$(sdk)'
-    scheme: '$(scheme)'
-    configuration: '$(configuration)'
-    xcodeVersion: 'default' # Options: default, 10, 9, 8, specifyPath
-    exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
-    packageApp: false
+    xcWorkspacePath: 'iOSBuild/Unity-iPhone.xcworkspace'
+    scheme: 'Unity-iPhone'
+    sdk: 'iphoneos'
+    packageApp: true
+    archivePath: iOSBuild
+    exportPath: $(Build.ArtifactStagingDirectory)/ios
     signingOption: 'manual'
-    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
-    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
-    # args: 'CODE_SIGNING_ALLOWED=No'
+    signingIdentity: '<SigningIdentity>'
+    args: 'PROVISIONING_PROFILE_APP=<ProvisioningProfileUuid> PROVISIONING_PROFILE_SPECIFIER_APP=<ProvisioningProfileName>'
+    useXcpretty: false
+  condition: succeeded()
